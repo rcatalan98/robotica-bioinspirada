@@ -8,11 +8,23 @@ int in3 = 5;
 int in4 = 4;
 int enB = 3;
 
+int motorA[] = {in1, in2};
+int motorB[] = {in3, in4};
+
 // 👀
 const int trigPin = 12;
 const int echoPin = 11;
 
 float duration, distance;
+
+int count = 0;
+
+enum DIRECTION {
+  FORWARDS,
+  BACKWARDS,
+  RIGHT,
+  LEFT
+};
 
 void setup() {
 	// Set all the motor control pins to outputs
@@ -49,16 +61,72 @@ void loop() {
   Serial.print("Distance: ");
   Serial.println(distance);
   
-  delay(100);
+  setSpeed(80);
+	setDirection(FORWARDS);
 
-  if(distance > 10) {
+  
+
+  if(distance < 25) {
     // 🛞
-    directionControl();
-    delay(1000);
-    speedControl();
-    delay(1000);
+		evade();
   }
+
+	delay(1);
 }
+
+void evade() {
+	setDirection(BACKWARDS);
+	delay(700);
+	setDirection(LEFT);
+	delay(500);
+	setDirection(FORWARDS);
+}
+
+void setDirection(int direction) {
+	switch (direction) {
+		case FORWARDS:
+			digitalWrite(in1, LOW);
+			digitalWrite(in2, HIGH);
+			digitalWrite(in3, LOW);
+			digitalWrite(in4, HIGH);
+      Serial.println("FORWARDS");
+			break;
+
+		case BACKWARDS:
+			digitalWrite(in1, HIGH);
+			digitalWrite(in2, LOW);
+			digitalWrite(in3, HIGH);
+			digitalWrite(in4, LOW);
+      Serial.println("BACKWARDS");
+
+			break;
+
+		case RIGHT:
+			digitalWrite(in1, HIGH);
+			digitalWrite(in2, LOW);
+			digitalWrite(in3, LOW);
+			digitalWrite(in4, HIGH);
+      Serial.println("RIGHT");
+
+			break;
+
+		case LEFT:
+			digitalWrite(in1, LOW);
+			digitalWrite(in2, HIGH);
+			digitalWrite(in3, HIGH);
+			digitalWrite(in4, LOW);
+      Serial.println("LEFT");
+
+			break;
+	}
+
+}
+
+void setSpeed(int speed) {
+	analogWrite(enA, speed);
+	analogWrite(enB, speed);
+}
+
 
 // This function lets you control spinning direction of motors
 void directionControl() {
