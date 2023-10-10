@@ -25,6 +25,7 @@ public:
     void turnLeft();
     void turnRight();
     bool isObstacle();
+    bool isLight();
     void run();
 };
 

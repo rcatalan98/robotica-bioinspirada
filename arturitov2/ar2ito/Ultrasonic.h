@@ -11,7 +11,7 @@ private:
 
 public:
     Ultrasonic(int trigPin, int echoPin);
-    int getDistance();
+    float getDistance();
 };
 
 #endif

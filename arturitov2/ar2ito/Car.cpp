@@ -46,12 +46,23 @@ void Car::turnRight()
 
 bool Car::isObstacle()
 {
-    return this->ultrasonic.getDistance() < 10;
+    float distance = this->ultrasonic.getDistance();
+    Serial.print("Ultrasonic: ");
+    Serial.println(distance);
+    return distance < 25;
+}
+
+bool Car::isLight() 
+{
+  int light = this->ldr.getLight();
+  Serial.print("Light: ");
+  Serial.println(light);
+  return light > 500;
 }
 
 void Car::run()
 {
-    bool shouldEvade = isObstacle();
+    bool shouldEvade = !isLight();
     unsigned long currentTime = millis();
 
     if (shouldEvade)
@@ -60,13 +71,13 @@ void Car::run()
         {
             setSpeed(80);
             goBackwards();
-            Serial.println("BACKWARDS");
+            //Serial.println("BACKWARDS");
         }
         else if (currentTime - lastUpdate < 1200)
         {
             setSpeed(80);
             turnLeft();
-            Serial.println("LEFT");
+            //Serial.println("LEFT");
         }
         else
         {
@@ -77,6 +88,6 @@ void Car::run()
     {
         setSpeed(120);
         goForwards();
-        Serial.println("FORWARDS");
+        //Serial.println("FORWARDS");
     }
 }
